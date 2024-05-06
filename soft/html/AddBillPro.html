@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Store - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c3bdbd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 35px;
+            font-family: Arial;
+            margin: 0;
+        }
+
+        .menu ul {
+            display: flex;
+            gap: 40px;
+        }
+
+        .menu ul li {
+            list-style: none;
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-family: Arial;
+            font-weight: bold;
+            transition: 0.4s ease-in-out;
+        }
+
+        .menu ul li a:hover {
+            color: #ff7200;
+        }
+
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #ff7200;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #05386B;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .options {
+            margin-top: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .option {
+            width: 150px;
+            height: 150px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .option:hover {
+            background-color: #ff7200;
+            color: #fff;
+        }
+
+        /* Style for order products form */
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px; /* Adjusted margin */
+            width: 80%; /* Adjusted width */
+            max-width: 600px; /* Adjusted max-width */
+        }
+
+        #bill-products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        #bill-products-table th,
+        #bill-products-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+
+        #bill-products-table th {
+            background-color: #f2f2f2;
+        }
+
+        #add-product-button,
+        #submit-bill-button {
+            padding: 10px 20px;
+            background-color: #ff7200;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #add-product-button:hover,
+        #submit-bill-button:hover {
+            background-color: #05386B;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <h2 class="logo"><a href="dash.html" style="text-decoration: none; color: inherit;">My Store</a></h2>
+            <button class="logout-button" onclick="logout()">LOGOUT</button>
+        </div>
+    </header>
+
+    <!-- Billing Products Form -->
+    <div class="container">
+        <form id="bill-products-form">
+            <table id="bill-products-table">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically added here -->
+                    <td><input type="text" name="product_id[]" required></td>
+                    <td><input type="number" name="quantity[]" required></td>
+                    <td><button type="button" class="remove-product-button" onclick="removeProductRow(event)">Remove</button></td>
+                
+                </tbody>
+            </table>
+            <button type="button" id="add-product-button" onclick="addProductRow()">Add Product Row</button>
+            <button type="submit" id="submit-bill-button">Submit Bill</button>
+        </form>
+    </div>
+
+    <script>
+        function logout() {
+            document.cookie.split(';').forEach(function(cookie) {
+                var eqPos = cookie.indexOf('=');
+                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            });            
+            window.location.href = 'login.html';
+    
+            console.log('Logged out');
+        }
+        
+        const addProductRow = () => {
+            const tableBody = document.querySelector('#bill-products-table tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" name="product_id[]" required></td>
+                <td><input type="number" name="quantity[]" required></td>
+                <td><button type="button" class="remove-product-button" onclick="removeProductRow(event)">Remove</button></td>
+            `;
+            tableBody.appendChild(newRow);
+        };
+    
+        // Function to remove a row for a product
+        const removeProductRow = (event) => {
+            const tableRow = event.target.closest('tr');
+            tableRow.remove();
+        };
+    
+        // Function to submit the bill with products
+        const submitBill = async () => {
+            // Get the form data
+            const formData = new FormData(document.getElementById('bill-products-form'));
+    
+            try {
+                // Send a POST request to the backend with the form data
+                const responseBill = await fetch('/submit-bill', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+                if (!responseBill.ok) {
+                    throw new Error('Bill submission failed');
+                }
+    
+                alert('Bill submitted successfully!');
+                // Redirect to another page after successful bill submission
+                window.location.href="dash.html";
+            } catch (error) {
+                console.error('Error submitting bill:', error);
+                alert('Bill submission failed. Please try again later.');
+            }
+        };
+    
+        // Add event listener for the "Add Product" button
+        document.getElementById('add-product-button').addEventListener('click', addProductRow);
+    
+        // Add event listener for the form submission
+        document.getElementById('bill-products-form').addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+            submitBill(); // Call the function to submit the bill
+        });
+    </script>
+</body>

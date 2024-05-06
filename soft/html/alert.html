@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Store - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c3bdbd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 35px;
+            font-family: Arial;
+            margin: 0;
+        }
+
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #ff7200;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #05386B;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <h2 class="logo"><a href="dash.html" style="text-decoration: none; color: inherit;">My Store</a></h2>
+            <button class="logout-button" onclick="logout()">LOGOUT</button>
+        </div>
+    </header>
+
+    <script>
+        function logout() {
+            document.cookie.split(';').forEach(function(cookie) {
+                var eqPos = cookie.indexOf('=');
+                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            });
+            window.location.href = 'login.html'; /* Corrected login.html */
+
+            console.log('Logged out');
+        }
+    </script>
+</body>
