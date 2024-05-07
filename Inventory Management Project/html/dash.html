@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Store - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c3bdbd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 35px;
+            font-family: Arial;
+            margin: 0;
+        }
+
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #ff7200;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #05386B;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 80px; /* Adjusted margin-top */
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .option {
+            width: 150px;
+            height: 150px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            text-decoration: none; /* Added text-decoration */
+            color: inherit; /* Added color */
+        }
+
+        .option:hover {
+            background-color: #ff7200;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <h2 class="logo"><a href="dash.html" style="text-decoration: none; color: inherit;">My Store</a></h2>
+            <button class="logout-button" onclick="logout()">LOGOUT</button>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <div class="options">
+            <a href="AddBillPro.html" class="option">Billing</a>
+            <a href="AddOder.html" class="option">New Order</a>
+            <a href='delivery.html' class="option">Delivery</a>
+            <a href='pen_delivery.html' class="option">Pending Delivery</a>
+            <a href="SearchPro.html" class="option">Search</a>
+            <a href="AddSupplier.html" class="option">Add Supplier</a>
+            <a href="alert.html" class="option">Check for Resupply</a>
+            <a href="AddPro.html" class="option">Add New Producty</a>
+
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            fetch('/clearAllCookies', {
+                method: 'GET'
+            }).then(response => {
+                window.location.href = '/login.html';
+            }).catch(error => {
+            });
+        }
+
+        window.onload = function checkEmployeeIdCookie() {
+            fetch('/check', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized');
+                }
+            })
+            .catch(error => {
+                window.location.href = 'error_login.html';
+            });
+        };
+
+
+
+    </script>
+</body>
+
+</html>

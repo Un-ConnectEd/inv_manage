@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Store - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c3bdbd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 35px;
+            font-family: Arial;
+            margin: 0;
+        }
+
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #ff7200;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #05386B;
+        }
+
+        .container {
+            background-color: #fff; 
+            position: absolute; 
+            top: 20%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            width: 80%; 
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <h2 class="logo"><a href="dash.html" style="text-decoration: none; color: inherit;">My Store</a></h2>
+            <button class="logout-button" onclick="logout()">LOGOUT</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <table id="search-results-table">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Inventory Location</th>
+                    <th>Warehouse Stock Level</th>
+                    <th>Minimum Stock Level</th>
+                </tr>
+            </thead>
+            <tbody id="search-results-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+         window.onload =  async () => {
+            try {
+                // Send a POST request to the backend to restock
+                const response = await fetch('/restock', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({}),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Restock failed');
+                }
+
+                // Parse the JSON response
+                const restockResults = await response.json();
+
+                // Get the table body element
+                const tableBody = document.getElementById('search-results-body');
+
+                // Clear previous results
+                tableBody.innerHTML = '';
+
+                // Populate the table with restock results
+                restockResults.forEach(result => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${result.ProductID}</td>
+                        <td>${result.ProductName}</td>
+                        <td>${result.inventoryLocation}</td>
+                        <td>${result.WarehouseStockLevel}</td>
+                        <td>${result.MinimumStockLevel}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error restocking products:', error);
+                alert('Restock failed. Please try again later.');
+            }
+        };
+
+
+        function logout() {
+            fetch('/clearAllCookies', {
+                method: 'GET'
+            }).then(response => {
+                window.location.href = '/login.html';
+            }).catch(error => {
+            });
+        }
+
+        window.onload = function checkEmployeeIdCookie() {
+            fetch('/check', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized');
+                }
+            })
+            .catch(error => {
+                window.location.href = 'error_login.html';
+            });
+        };
+
+    
+    </script>
+</body>
+
+</html>

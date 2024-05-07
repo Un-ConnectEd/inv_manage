@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Store - Login Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c3bdbd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 35px;
+            font-family: Arial;
+            margin: 0;
+        }
+
+        .menu ul {
+            display: flex;
+            gap: 40px;
+        }
+
+        .menu ul li {
+            list-style: none;
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #000;
+            font-family: Arial;
+            font-weight: bold;
+            transition: 0.4s ease-in-out;
+        }
+
+        .menu ul li a:hover {
+            color: #ff7200;
+        }
+
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #05386B;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background-color: #ff7200;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <h2 class="logo"><a href="login.html" style="text-decoration: none; color: inherit;">My Store</a></h2>
+        </div>
+    </header>
+
+    <div class="login-container">
+        <div class="form-group">
+            <label for="employee-id">Employee ID:</label>
+            <input type="text" id="employee-id" placeholder="Enter your Employee ID">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        <button class="login-button" onclick="login()">LOGIN</button>
+    </div>
+
+    <script>
+
+        window.onload = function() {
+            alert('Please login first');
+        };
+        function login() {
+            const employeeID = document.getElementById('employee-id').value;
+            const password = document.getElementById('password').value;
+    
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ employeeID, password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to login');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.cookie = `EmployeeID=${data.employeeID}`;
+                window.location.href = '/dash.html'; 
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+            });
+        }
+    </script>
+    
+</body>
+
+</html>
